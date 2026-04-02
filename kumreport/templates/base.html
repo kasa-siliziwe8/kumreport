@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}KumReport{% endblock %}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; color: #2c2c2a; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header {
+      background: #185FA5;
+      color: #fff;
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header .brand { font-size: 20px; font-weight: bold; text-decoration: none; color: #fff; }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    nav a:hover { background: rgba(255,255,255,0.2); }
+    nav a.active { background: rgba(255,255,255,0.25); font-weight: bold; }
+
+    main { flex: 1; }
+
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: #888780;
+      padding: 16px;
+      border-top: 1px solid #d3d1c7;
+      background: #fff;
+      margin-top: 40px;
+    }
+  </style>
+  {% block extra_styles %}{% endblock %}
+</head>
+<body>
+
+<header>
+  <a href="/" class="brand">KumReport</a>
+  <nav>
+    <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+    <a href="/report/" {% if '/report/' in request.path %}class="active"{% endif %}>Report</a>
+    <a href="/tracker/" {% if '/tracker/' in request.path %}class="active"{% endif %}>Track</a>
+    <a href="/admin-panel/" {% if '/admin-panel/' in request.path %}class="active"{% endif %}>Admin</a>
+  </nav>
+</header>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  KumReport &copy; 2026 · Sol Plaatje Municipality · Kimberley, Northern Cape
+</footer>
+
+</body>
+</html>

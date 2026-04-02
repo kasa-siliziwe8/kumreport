@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}KumReport – Track My Report{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .container { max-width: 600px; margin: 40px auto; padding: 0 16px; }
+  .card { background: #fff; border-radius: 8px; border: 1px solid #d3d1c7; padding: 28px; margin-bottom: 20px; }
+  .card h2 { font-size: 16px; margin-bottom: 20px; color: #185FA5; }
+  .search-row { display: flex; gap: 8px; }
+  input[type="text"] { flex: 1; padding: 10px 12px; border: 1px solid #b4b2a9; border-radius: 4px; font-size: 14px; }
+  button[type="submit"] { padding: 10px 20px; background: #185FA5; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; }
+  button[type="submit"]:hover { background: #0c447c; }
+  .error-box { background: #fcebeb; border: 1px solid #f09595; border-radius: 6px; padding: 12px 16px; color: #a32d2d; font-size: 13px; margin-top: 16px; }
+  .ticket-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .ticket-top h3 { font-size: 15px; margin-bottom: 4px; }
+  .ticket-top p { font-size: 12px; color: #5f5e5a; margin-top: 3px; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+  .badge-Submitted  { background: #f1efe8; color: #5f5e5a; border: 1px solid #b4b2a9; }
+  .badge-Assigned   { background: #e6f1fb; color: #185fa5; border: 1px solid #85b7eb; }
+  .badge-In-Progress { background: #faeeda; color: #854f0b; border: 1px solid #fac775; }
+  .badge-Resolved   { background: #eaf3de; color: #3b6d11; border: 1px solid #c0dd97; }
+  .progress-tracker h4 { font-size: 13px; color: #5f5e5a; margin-bottom: 12px; }
+  .step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+  .step-left { display: flex; flex-direction: column; align-items: center; }
+  .step-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; flex-shrink: 0; }
+  .step-circle.done { background: #185FA5; color: #fff; }
+  .step-circle.pending { background: #d3d1c7; color: #888780; }
+  .step-line { width: 2px; height: 24px; margin: 2px 0; }
+  .step-line.done { background: #185FA5; }
+  .step-line.pending { background: #d3d1c7; }
+  .step-content { padding-top: 4px; }
+  .step-content p { font-size: 13px; font-weight: 500; }
+  .step-content span { font-size: 11px; color: #888780; }
+  .sms-notify { background: #faeeda; border: 1px solid #fac775; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #854f0b; margin-top: 16px; text-align: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="card">
+    <h2>Track My Report</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="search-row">
+        <input type="text" name="ref_number" placeholder="Enter reference number e.g. KMR-2026-A1B2C">
+        <button type="submit">Search</button>
+      </div>
+    </form>
+    {% if error %}
+      <div class="error-box">{{ error }}</div>
+    {% endif %}
+  </div>
+
+  {% if ticket %}
+  <div class="card">
+    <div class="ticket-top">
+      <div>
+        <h3>Ref: {{ ticket.ref }}</h3>
+        <p>{{ ticket.issue }}</p>
+        <p>{{ ticket.address }}</p>
+        <p>Submitted: {{ ticket.submitted }}</p>
+      </div>
+      <div>
+        <span class="badge badge-{{ ticket.status|cut:' ' }}">{{ ticket.status }}</span>
+      </div>
+    </div>
+    <div class="progress-tracker">
+      <h4>Progress</h4>
+      {% for step in ticket.steps %}
+        <div class="step">
+          <div class="step-left">
+            <div class="step-circle {% if step.done %}done{% else %}pending{% endif %}">{{ forloop.counter }}</div>
+            {% if not forloop.last %}
+              <div class="step-line {% if step.done %}done{% else %}pending{% endif %}"></div>
+            {% endif %}
+          </div>
+          <div class="step-content">
+            <p style="color: {% if step.done %}#2c2c2a{% else %}#888780{% endif %}">{{ step.label }}</p>
+            <span>{% if step.date %}{{ step.date }}{% else %}Pending{% endif %}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="sms-notify">Want SMS updates? Reply "TRACK {{ ticket.ref }}" to 08600 SOL</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

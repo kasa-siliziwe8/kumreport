@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}KumReport – Home{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .hero {
+    background: linear-gradient(135deg, #185FA5 0%, #0c447c 100%);
+    color: #fff;
+    text-align: center;
+    padding: 80px 24px 60px;
+  }
+  .hero h1 { font-size: 36px; margin-bottom: 12px; }
+  .hero p { font-size: 16px; color: #b5d4f4; max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+  .cards {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 48px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #d3d1c7;
+    border-radius: 10px;
+    padding: 32px 28px;
+    width: 260px;
+    text-align: center;
+    text-decoration: none;
+    color: #2c2c2a;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-3px); }
+
+  .card-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+  }
+  .card h2 { font-size: 17px; margin-bottom: 8px; color: #185FA5; }
+  .card p { font-size: 13px; color: #5f5e5a; line-height: 1.5; }
+
+  .card.admin { border-color: #e24b4a; }
+  .card.admin h2 { color: #a32d2d; }
+
+  .sms-banner {
+    background: #faeeda;
+    border-top: 1px solid #fac775;
+    border-bottom: 1px solid #fac775;
+    text-align: center;
+    padding: 14px 24px;
+    font-size: 13px;
+    color: #854f0b;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+  <h1>Welcome to KumReport</h1>
+  <p>Kimberley's community waste reporting system. Report missed bin collections, track your reports, and hold the municipality accountable.</p>
+</div>
+
+<div class="sms-banner">
+  No internet? SMS <strong>"WASTE [street name]"</strong> to <strong>08600 SOL (08600 765)</strong> to report an issue.
+</div>
+
+<div class="cards">
+  <a href="/report/" class="card">
+    <div class="card-icon">📋</div>
+    <h2>Report an Issue</h2>
+    <p>Submit a missed bin collection or waste-related complaint quickly — no account needed.</p>
+  </a>
+
+  <a href="/tracker/" class="card">
+    <div class="card-icon">🔍</div>
+    <h2>Track My Report</h2>
+    <p>Enter your reference number to check the current status and progress of your report.</p>
+  </a>
+
+  <a href="/admin-panel/" class="card admin">
+    <div class="card-icon">🛠️</div>
+    <h2>Admin Panel</h2>
+    <p>Municipal staff can log in to view all reports and update their status in real time.</p>
+  </a>
+</div>
+{% endblock %}

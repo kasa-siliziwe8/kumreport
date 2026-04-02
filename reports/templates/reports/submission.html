@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}KumReport – Report a Missed Collection{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .container { max-width: 600px; margin: 40px auto; padding: 0 16px; }
+  .card { background: #fff; border-radius: 8px; border: 1px solid #d3d1c7; padding: 28px; }
+  .card h2 { font-size: 16px; margin-bottom: 20px; color: #185FA5; }
+  label { display: block; font-size: 13px; color: #5f5e5a; margin-bottom: 4px; margin-top: 16px; }
+  input[type="text"], select, textarea {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid #b4b2a9; border-radius: 4px;
+    font-size: 14px; color: #2c2c2a; background: #fff;
+  }
+  textarea { height: 80px; resize: vertical; }
+  .no-login-note {
+    background: #eaf3de; border: 1px solid #c0dd97;
+    border-radius: 4px; padding: 8px 12px;
+    font-size: 12px; color: #3b6d11; margin-top: 20px;
+  }
+  .sms-note {
+    background: #f1efe8; border: 1px solid #d3d1c7;
+    border-radius: 4px; padding: 8px 12px;
+    font-size: 12px; color: #5f5e5a; margin-top: 12px; text-align: center;
+  }
+  button[type="submit"] {
+    width: 100%; margin-top: 20px; padding: 12px;
+    background: #185FA5; color: #fff;
+    border: none; border-radius: 6px; font-size: 15px; cursor: pointer;
+  }
+  button[type="submit"]:hover { background: #0c447c; }
+  .success-box {
+    background: #eaf3de; border: 1px solid #c0dd97;
+    border-radius: 8px; padding: 24px; text-align: center;
+  }
+  .success-box h3 { color: #3b6d11; margin-bottom: 8px; }
+  .ref-number { font-size: 24px; font-weight: bold; color: #185FA5; letter-spacing: 2px; margin: 12px 0; }
+  .success-box p { font-size: 13px; color: #5f5e5a; }
+  .track-link {
+    display: inline-block; margin-top: 16px; padding: 10px 24px;
+    background: #185FA5; color: #fff; border-radius: 6px;
+    text-decoration: none; font-size: 14px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="card">
+    {% if success %}
+      <div class="success-box">
+        <h3>Report Submitted Successfully</h3>
+        <div class="ref-number">{{ ref_number }}</div>
+        <p>Your report has been received. Save this reference number to track your report.</p>
+        <p style="margin-top:8px;">Submitted: {{ submitted_at }} &nbsp;|&nbsp; {{ street_address }}</p>
+        <a href="/tracker/" class="track-link">Track My Report</a>
+      </div>
+    {% else %}
+      <h2>Report a Missed Bin Collection</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <label for="street_address">Street Address *</label>
+        <input type="text" id="street_address" name="street_address"
+               placeholder="e.g. 12 Du Toitspan Road, Kimberley" required>
+        <label for="issue_type">Issue Type *</label>
+        <select id="issue_type" name="issue_type" required>
+          <option value="">-- Select issue --</option>
+          <option value="Missed Bin Collection">Missed Bin Collection</option>
+          <option value="Overflowing Skip">Overflowing Skip</option>
+          <option value="Illegal Dumping">Illegal Dumping</option>
+          <option value="Other Waste Issue">Other Waste Issue</option>
+        </select>
+        <label for="details">Additional Details (optional)</label>
+        <textarea id="details" name="details" placeholder="Describe the issue..."></textarea>
+        <div class="no-login-note">No account required — submit directly without registering.</div>
+        <div class="sms-note">No internet? SMS "WASTE [street name]" to 08600 SOL (08600 765)</div>
+        <button type="submit">Submit Report</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
