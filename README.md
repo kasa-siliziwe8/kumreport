@@ -63,7 +63,7 @@ python manage.py runserver
 # Report page:  http://127.0.0.1:8000/
 # Track page:   http://127.0.0.1:8000/tracker/
 ```
-
+Password for Admin is: kumreport2026
 ---
 
 ## Demo Reference Numbers (for tracker testing)
